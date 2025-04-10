@@ -8,7 +8,7 @@ int main()
 {
     tpTablero tablero;
 
-    inicializarTablero("../tableros_modelo/tableroEuropeo.txt", tablero);
+    bool lecturaOk = inicializarTablero("./tableros_modelo/tableroEuropeo.txt", tablero);
     mostrarTablero(tablero);
 
     return 0;
