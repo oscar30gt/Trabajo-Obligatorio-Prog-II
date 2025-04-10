@@ -5,10 +5,11 @@ using namespace std;
 
 // CONSTANTES Y TIPOS
 
+// Modificado: se ha añadido el caracter que representa cada estado de la celda
 enum tpEstadoCelda {
-    NO_USADA, 
-    VACIA,
-    OCUPADA
+    NO_USADA = '-', 
+    VACIA = 'x',
+    OCUPADA = 'o'
 }; 
 
 enum tpDireccion {
