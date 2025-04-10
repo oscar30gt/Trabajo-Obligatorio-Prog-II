@@ -14,12 +14,12 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero)
     }
 
     f >> tablero.nfils >> tablero.ncols;
-    for (int i = 0; i < tablero.nfils; ++i)
-        for (int j = 0; j < tablero.ncols; ++j)
+    for (int y = 0; y < tablero.ncols; y++)
+        for (int x = 0; x < tablero.nfils; x++)
         {
             char aux;
             f >> aux;
-            tablero.matriz[i][j] = (tpEstadoCelda)aux;
+            tablero.matriz[x][y] = (tpEstadoCelda)aux;
         }
 
     f.close();
@@ -58,10 +58,10 @@ bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosVali
 // Post: Se ha mostrado el tablero por pantalla
 void mostrarTablero(const tpTablero &tablero)
 {
-    for (int i = 0; i < tablero.nfils; ++i)
+    for (int y = 0; y < tablero.nfils; y++)
     {
-        for (int j = 0; j < tablero.ncols; ++j)
-            cout << (char)tablero.matriz[i][j] << " ";
+        for (int x = 0; x < tablero.ncols; x++)
+            cout << (char)tablero.matriz[x][y] << " ";
         cout << endl;
     }
     cout << endl;
@@ -74,6 +74,23 @@ void mostrarTablero(const tpTablero &tablero)
 //       Devuelve 1 si encuentra solución, -1 si no la encuentra.
 int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo)
 {
+    tpSimetria simetria = simetriaTablero(tablero);
+
+    // Area de búsqueda
+    // Si el tablero es simétrico, se puede reducir la búsqueda a la mitad
+    int buscarX = (simetria & 0b01) ? (tablero.ncols + 1) / 2 : tablero.ncols;
+    int buscarY = (simetria & 0b10) ? (tablero.nfils + 1) / 2 : tablero.nfils;
+
+    // Itera sobre el tablero probando movimientos
+    for (int y = 0; y < buscarY; y++)
+        for (int x = 0; x < buscarX; x++)
+        {
+            tpEstadoCelda celda = tablero.matriz[x][y];
+            if (celda != OCUPADA)
+                continue;
+        }
+
+    return 1; // Placeholder: Implementar la lógica de búsqueda de solución
 }
 
 // Pre: listaMovimientos contiene la lista de movimientos con la solucion
@@ -81,4 +98,54 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
 //      formato especificado en el guión (si está vacía, se escribe un -1 en el fichero)
 void escribeListaMovimientos(string nombreFichero, const tpListaMovimientos &solucion)
 {
+    ofstream f(nombreFichero);
+    if (!f.is_open())
+    {
+        cerr << "Error al abrir el fichero de salida." << endl;
+        return;
+    }
+
+    if (solucion.numMovs == 0)
+        f << -1 << endl;
+
+    else
+        for (int i = 0; i < solucion.numMovs; i++)
+            f << solucion.movs[i].origen.x << ","
+              << solucion.movs[i].origen.y << ":"
+              << solucion.movs[i].destino.x << ","
+              << solucion.movs[i].destino.y << endl;
+
+    f.close();
+}
+
+// Pre: tablero contiene el estado del tablero
+// Post: devuelve la simetría del tablero (vertical, horizontal, ambas o ninguna)
+tpSimetria simetriaTablero(const tpTablero &tablero)
+{
+    tpSimetria simetria = NO_SIMETRICA;
+
+    // Simetría horizontal
+    // Se comprueba si el tablero es simétrico respecto al eje vertical
+    bool simetricaHorizontal = true;
+    for (int y = 0; y < tablero.nfils; y++)
+        for (int x = 0; x < tablero.ncols / 2; x++)
+            if (tablero.matriz[x][y] != tablero.matriz[tablero.ncols - x - 1][y])
+                simetricaHorizontal = false;
+
+    if (simetricaHorizontal)
+        simetria = HORIZONTAL;
+
+
+    // Simetría vertical
+    // Se comprueba si el tablero es simétrico respecto al eje horizontal
+    bool simetricaVertical = true;
+    for (int y = 0; y < tablero.nfils / 2; y++)
+        for (int x = 0; x < tablero.ncols; x++)
+            if (tablero.matriz[x][y] != tablero.matriz[x][tablero.nfils - y - 1])
+                simetricaVertical = false;
+
+    if (simetricaVertical)
+        simetria = (tpSimetria)(simetria | VERTICAL);
+
+    return simetria;
 }

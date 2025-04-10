@@ -5,12 +5,20 @@ using namespace std;
 
 // CONSTANTES Y TIPOS
 
+enum tpSimetria
+{
+    NO_SIMETRICA,
+    HORIZONTAL,
+    VERTICAL,
+    AMBAS,
+};
+
 // Modificado: se ha añadido el caracter que representa cada estado de la celda
 enum tpEstadoCelda
 {
     NO_USADA = '-',
     VACIA = 'x',
-    OCUPADA = 'o'
+    OCUPADA = 'o',
 };
 
 enum tpDireccion
@@ -22,7 +30,7 @@ enum tpDireccion
     derecha,
     inferiorIzquierda,
     inferior,
-    inferiorDerecha
+    inferiorDerecha,
 };
 
 // Máximo múmero de filas y columnas del tablero
@@ -33,8 +41,7 @@ struct tpTablero
 {
     int nfils;                            // Número de filas del tablero
     int ncols;                            // Número de columnas del tablero
-    tpEstadoCelda matriz[MAXDIM][MAXDIM]; // Una celda puede estar vacía, ocupada o no formar parte
-                                          // del tablero
+    tpEstadoCelda matriz[MAXDIM][MAXDIM]; // Una celda puede estar vacía, ocupada o no formar parte del tablero
                                           // Las coordenadas de la casilla de arriba a la izquierda son (0,0)
 };
 
@@ -112,6 +119,10 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
 // Post: escribe la lista de movimientos en el fichero que se le pasa como argumento siguiendo el
 //      formato especificado en el guión (si está vacía, se escribe un -1 en el fichero)
 void escribeListaMovimientos(string nombreFichero, const tpListaMovimientos &solucion);
+
+// Pre: tablero contiene el estado del tablero
+// Post: devuelve la simetría del tablero (vertical, horizontal, ambas o ninguna)
+tpSimetria simetriaTablero(const tpTablero &tablero);
 
 //////////////////////////////////////////////////////////////////////////////
 // Salida con atributos

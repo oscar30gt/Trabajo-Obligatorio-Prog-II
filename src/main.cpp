@@ -76,9 +76,11 @@ int main(int argc, char *argv[])
 
     tpTablero tablero;
     tpMovimientosValidos movimientosValidos;
+    tpListaMovimientos solucionParcial;
 
-    bool lecturaOk = inicializarTablero("./tableros_modelo/tableroEuropeo.txt", tablero);
+    bool lecturaOk = inicializarTablero("./tableros_modelo/tableroIngles.txt", tablero);
     lecturaOk = inicializarMovimientosValidos("./movimientos/movimientosClasicos.txt", movimientosValidos);
+    int aux = buscaSolucion(tablero, movimientosValidos, solucionParcial);
 
     mostrarTablero(tablero);
 

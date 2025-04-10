@@ -4,7 +4,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -O2
 SRC := src/main.cpp src/GSenku.cpp
 OBJ_DIR := .out
 OBJ := $(SRC:src/%.cpp=$(OBJ_DIR)/%.o)
-OUT := mainGSenku
+OUT := main
 
 # Crear las carpetas de salida si no existen
 $(shell mkdir $(OBJ_DIR))
