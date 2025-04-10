@@ -1,5 +1,4 @@
 #include "GSenku.hpp"
-
 #include <fstream>
 
 // Pre: true
@@ -10,7 +9,7 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero)
     ifstream f(nombreFichero);
     if (!f.is_open())
     {
-        cout << "Error al abrir el fichero de configuración." << endl;
+        cerr << "Error al abrir el fichero del tablero." << endl;
         return false;
     }
 
@@ -32,6 +31,27 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero)
 //      inicializando la estructura y devolviendo true si todo ha ido bien y false si ha habido algún error
 bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosValidos &movimientos)
 {
+    ifstream f(nombreFichero);
+    if (!f.is_open())
+    {
+        cerr << "Error al abrir el fichero de movimientos." << endl;
+        return false;
+    }
+
+    int i = 0;
+    while (i < 8)
+    {
+        char aux;
+        f >> aux;
+
+        if (aux == '-')
+            movimientos.validos[i++] = false;
+        else if (aux == '+')
+            movimientos.validos[i++] = true;
+    }
+
+    f.close();
+    return true;
 }
 
 // Pre: tablero contiene el estado actual de la ejecución de la búsqueda de la solución

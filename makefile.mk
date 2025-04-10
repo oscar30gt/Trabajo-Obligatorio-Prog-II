@@ -2,7 +2,7 @@
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2
 SRC := src/main.cpp src/GSenku.cpp
-OBJ_DIR := out
+OBJ_DIR := .out
 OBJ := $(SRC:src/%.cpp=$(OBJ_DIR)/%.o)
 OUT := main
 

@@ -64,7 +64,8 @@ struct tpListaMovimientos {
 // Tipo tpMovimientosValidos
 struct tpMovimientosValidos {
     // cada valor de tpDireccion se corresponderá con una posición de este vector
-    bool validos[8]; 
+    // validos[0] = true significa que el movimiento superior izquierdo es válido. Sigue en el sentido de las agujas del reloj
+    bool validos[8];
 };
 
 
