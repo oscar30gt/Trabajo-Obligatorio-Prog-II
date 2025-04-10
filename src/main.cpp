@@ -50,14 +50,22 @@ bool leerArgumentos(
     return true;
 }
 
+/**
+ * Progrema principal que resuleve el juego de GSenku.
+ * 
+ * @param argc Número de argumentos pasados al programa.
+ * @param argv Array de argumentos pasados al programa.
+ */
 int main(int argc, char *argv[])
 {
-
     string ficheroTablero, ficheroMovimientos, ficheroSalida;
     int retardo;
     bool argumentosOk = leerArgumentos(argc, argv, ficheroTablero, ficheroMovimientos, retardo, ficheroSalida);
 
-    // Borrar para la entega. Solo para ver que se leen los argumentos
+    if (!argumentosOk)
+        return 1;
+
+    // Borrar para la entega. Solo para ver que se leen bien los argumentos
     cout << "Argumentos leídos: " << endl
          << "------------------------------------------------" << endl
          << "Fichero Tablero: " << ficheroTablero << endl

@@ -1,4 +1,4 @@
 # Trabajo-Obligatorio-Prog-II
 
-Óscar Grimal Torres
+Óscar Grimal Torres\
 Hugo García Sánchez
