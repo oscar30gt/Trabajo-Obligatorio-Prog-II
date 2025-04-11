@@ -73,6 +73,18 @@ struct tpListaMovimientos
 {
     tpMovimientoPieza movs[MAXDIM * MAXDIM]; // como cada movimiento elimina una pieza, el número de movimientos de la solución está acotado
     int numMovs = 0;
+
+    void push(const tpMovimientoPieza mov)
+    {
+        movs[numMovs] = mov;
+        numMovs++;
+    }
+
+    tpMovimientoPieza pop()
+    {
+        numMovs--;
+        return movs[numMovs];
+    }
 };
 
 // Tipo tpMovimientosValidos
@@ -114,6 +126,14 @@ void mostrarTablero(const tpTablero &tablero);
 // Post: solucionParcial contendrá la lista de movimientos completa (si no se llega a una solución, estará vacía, numMovs == 0)
 //       Devuelve 1 si encuentra solución, -1 si no la encuentra.
 int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo = 0);
+
+// Pre: tablero contiene el estado del tablero
+//      movValidos contiene los movimientos válidos
+//      solucionParcial contiene la lista de movimientos realizados hasta el momento
+//      posicionInicial contiene la posición inicial de la ficha a mover
+//      direccionMovimiento contiene la dirección del movimiento
+// Post: mueve la ficha en la dirección indicada y actualiza el tablero y la lista de movimientos. Si no se puede mover, devuelve false y no actualiza nada.
+bool moverFicha(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const tpPosicion posicionInicial, const tpDireccion direccionMovimiento);
 
 // Pre: listaMovimientos contiene la lista de movimientos con la solucion
 // Post: escribe la lista de movimientos en el fichero que se le pasa como argumento siguiendo el

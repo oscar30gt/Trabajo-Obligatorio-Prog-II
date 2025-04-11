@@ -25,7 +25,7 @@ bool leerArgumentos(
     // Se debben pasar 3 o 4 argumentos (sin contar el nombre del ejecutable)
     if (!(argc == 4 || argc == 5))
     {
-        cerr << "Error: Número de argumentos incorrecto. Argumentos esperados `ficheroTablero ficheroMovimientos retardo [ficheroSalida]`" << endl;
+        cerr << "Error: Numero de argumentos incorrecto. Argumentos esperados `ficheroTablero ficheroMovimientos retardo [ficheroSalida]`" << endl;
         return false;
     }
 
@@ -38,7 +38,7 @@ bool leerArgumentos(
     }
     catch (...)
     {
-        cerr << "Error: El retardo especificado no es un número entero." << endl;
+        cerr << "Error: El retardo especificado no es un numero entero." << endl;
         return false;
     }
 
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
         return 1;
 
     // Borrar para la entega. Solo para ver que se leen bien los argumentos
-    cout << "Argumentos leídos: " << endl
+    cout << "Argumentos leidos: " << endl
          << "------------------------------------------------" << endl
          << "Fichero Tablero: " << ficheroTablero << endl
          << "Fichero Movimientos: " << ficheroMovimientos << endl
@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
     tpMovimientosValidos movimientosValidos;
     tpListaMovimientos solucionParcial;
 
-    bool lecturaOk = inicializarTablero("./tableros_modelo/tableroIngles.txt", tablero);
-    lecturaOk = inicializarMovimientosValidos("./movimientos/movimientosClasicos.txt", movimientosValidos);
+    bool lecturaOk = inicializarTablero("./tableros_modelo/tableroEuropeo.txt", tablero);
+    lecturaOk = inicializarMovimientosValidos("./movimientos/movimientosCompletos.txt", movimientosValidos);
     int aux = buscaSolucion(tablero, movimientosValidos, solucionParcial);
 
     mostrarTablero(tablero);

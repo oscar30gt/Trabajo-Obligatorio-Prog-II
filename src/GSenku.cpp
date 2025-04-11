@@ -74,6 +74,15 @@ void mostrarTablero(const tpTablero &tablero)
 //       Devuelve 1 si encuentra solución, -1 si no la encuentra.
 int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const int retardo)
 {
+    int fichas = 0;
+    for (int y = 0; y < tablero.nfils; y++)
+        for (int x = 0; x < tablero.ncols; x++)
+            if (tablero.matriz[x][y] == OCUPADA)
+                fichas++;
+
+    if (fichas == 1)
+        return 1; // Solución encontrada
+
     tpSimetria simetria = simetriaTablero(tablero);
 
     // Area de búsqueda
@@ -88,9 +97,101 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
             tpEstadoCelda celda = tablero.matriz[x][y];
             if (celda != OCUPADA)
                 continue;
+
+            for (int i = 0; i < 8; i++)
+            {
+                // Prueba el movimiento en cada direccion
+                bool movValido = moverFicha(tablero, movValidos, solucionParcial, {x, y}, (tpDireccion)i);
+                if (!movValido)
+                    continue;
+
+                // Llamada recursiva para buscar la solución desde el nuevo estado del tablero
+                int solucion = buscaSolucion(tablero, movValidos, solucionParcial, retardo);
+                if (solucion == 1)
+                    return 1;
+
+                // Si no se encuentra solución, deshacer el movimiento y seguir buscando
+                tpMovimientoPieza movDeshacer = solucionParcial.pop();
+                tablero.matriz[movDeshacer.origen.x][movDeshacer.origen.y] = OCUPADA;
+                tablero.matriz[(movDeshacer.origen.x + movDeshacer.destino.x) / 2]
+                              [(movDeshacer.origen.y + movDeshacer.destino.y) / 2] = OCUPADA;
+                tablero.matriz[movDeshacer.destino.x][movDeshacer.destino.y] = VACIA;
+            }
         }
 
-    return 1; // Placeholder: Implementar la lógica de búsqueda de solución
+    // Si despus de probar todos los movimientos no se ha encontrado solución, devolver -1
+    return -1;
+}
+
+// Pre: tablero contiene el estado del tablero
+//      movValidos contiene los movimientos válidos
+//      solucionParcial contiene la lista de movimientos realizados hasta el momento
+//      posicionInicial contiene la posición inicial de la ficha a mover
+//      direccionMovimiento contiene la dirección del movimiento
+// Post: mueve la ficha en la dirección indicada y actualiza el tablero y la lista de movimientos. Si no se puede mover, devuelve false y no actualiza nada.
+bool moverFicha(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const tpPosicion posicionInicial, const tpDireccion direccionMovimiento)
+{
+    if (!movValidos.validos[direccionMovimiento])
+        return false; // Movimiento no válido
+
+    // Comprobar que se salta a una celda vacía
+    tpPosicion nuevaPosicion = {posicionInicial.x, posicionInicial.y};
+    switch (direccionMovimiento)
+    {
+    case superiorIzquierda:
+        nuevaPosicion.x -= 2;
+        nuevaPosicion.y -= 2;
+        break;
+    case superiorDerecha:
+        nuevaPosicion.x += 2;
+        nuevaPosicion.y -= 2;
+        break;
+    case inferiorIzquierda:
+        nuevaPosicion.x -= 2;
+        nuevaPosicion.y += 2;
+        break;
+    case inferiorDerecha:
+        nuevaPosicion.x += 2;
+        nuevaPosicion.y += 2;
+        break;
+    case izquierda:
+        nuevaPosicion.x -= 2;
+        break;
+    case derecha:
+        nuevaPosicion.x += 2;
+        break;
+    case superior:
+        nuevaPosicion.y -= 2;
+        break;
+    case inferior:
+        nuevaPosicion.y += 2;
+        break;
+    default:
+        return false;
+    }
+
+    if (nuevaPosicion.x < 0 || nuevaPosicion.x >= tablero.ncols ||
+        nuevaPosicion.y < 0 || nuevaPosicion.y >= tablero.nfils ||
+        tablero.matriz[nuevaPosicion.x][nuevaPosicion.y] != VACIA)
+    {
+        return false; // Movimiento fuera de los límites del tablero o celda ocupada/no usada
+    }
+
+    // Comprobar que se salta sobre una celda ocupada
+    tpPosicion posicionCentral = {(posicionInicial.x + nuevaPosicion.x) / 2, (posicionInicial.y + nuevaPosicion.y) / 2};
+    if (tablero.matriz[posicionCentral.x][posicionCentral.y] != OCUPADA)
+        return false; // Un movimiento siempre salta una celda ocupada
+
+    // Movimiento valido
+    // Actualizar el tablero
+    tablero.matriz[posicionInicial.x][posicionInicial.y] = VACIA;
+    tablero.matriz[posicionCentral.x][posicionCentral.y] = VACIA;
+    tablero.matriz[nuevaPosicion.x][nuevaPosicion.y] = OCUPADA;
+
+    // Actualizar la lista de movimientos
+    tpMovimientoPieza nuevoMovimiento = {posicionInicial, nuevaPosicion};
+    solucionParcial.push(nuevoMovimiento);
+    return true;
 }
 
 // Pre: listaMovimientos contiene la lista de movimientos con la solucion
@@ -134,7 +235,6 @@ tpSimetria simetriaTablero(const tpTablero &tablero)
 
     if (simetricaHorizontal)
         simetria = HORIZONTAL;
-
 
     // Simetría vertical
     // Se comprueba si el tablero es simétrico respecto al eje horizontal
