@@ -57,11 +57,11 @@ bool inicializarMovimientosValidos(const string nombreFichero, tpMovimientosVali
 // Pre: tablero contiene el estado actual de la ejecución de la búsqueda de la solución
 // Post: Se ha mostrado el tablero por pantalla
 void mostrarTablero(const tpTablero &tablero)
-{
+{   
     for (int y = 0; y < tablero.nfils; y++)
     {
         for (int x = 0; x < tablero.ncols; x++)
-            cout << (char)tablero.matriz[x][y] << " ";
+        cout << (char)tablero.matriz[x][y] << " ";
         cout << endl;
     }
     cout << endl;
@@ -119,15 +119,15 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
             }
         }
 
-    // Si despus de probar todos los movimientos no se ha encontrado solución, devolver -1
+    // Si despues de probar todos los movimientos no se ha encontrado solución, devolver -1
     return -1;
 }
 
-// Pre: tablero contiene el estado del tablero
-//      movValidos contiene los movimientos válidos
+// Pre: tablero contiene el estado del tablero desde el que se quiere mover una ficha
+//      movValidos contiene los movimientos válidos a realizar
 //      solucionParcial contiene la lista de movimientos realizados hasta el momento
-//      posicionInicial contiene la posición inicial de la ficha a mover
-//      direccionMovimiento contiene la dirección del movimiento
+//      posicionInicial contiene la posición inicial de la ficha a mover (no necesariamente tiene que haber una ficha en esa posición)
+//      direccionMovimiento contiene la dirección del movimiento (podría ser un movimiento no válido)
 // Post: mueve la ficha en la dirección indicada y actualiza el tablero y la lista de movimientos. Si no se puede mover, devuelve false y no actualiza nada.
 bool moverFicha(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpListaMovimientos &solucionParcial, const tpPosicion posicionInicial, const tpDireccion direccionMovimiento)
 {
@@ -173,9 +173,7 @@ bool moverFicha(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpLi
     if (nuevaPosicion.x < 0 || nuevaPosicion.x >= tablero.ncols ||
         nuevaPosicion.y < 0 || nuevaPosicion.y >= tablero.nfils ||
         tablero.matriz[nuevaPosicion.x][nuevaPosicion.y] != VACIA)
-    {
         return false; // Movimiento fuera de los límites del tablero o celda ocupada/no usada
-    }
 
     // Comprobar que se salta sobre una celda ocupada
     tpPosicion posicionCentral = {(posicionInicial.x + nuevaPosicion.x) / 2, (posicionInicial.y + nuevaPosicion.y) / 2};

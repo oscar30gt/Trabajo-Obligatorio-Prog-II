@@ -1,3 +1,5 @@
+.vscode
+
 # Prerequisites
 *.d
 
@@ -31,3 +33,5 @@
 *.out
 *.app
 
+# Archivos generados
+resultado.txt
