@@ -1,5 +1,7 @@
 #include "GSenku.hpp"
 #include <fstream>
+#include <chrono>
+#include <thread>
 
 // Pre: true
 // Post: lee la configuración y el estado del tablero del fichero de configuración que se le pasa como argumento
@@ -61,7 +63,18 @@ void mostrarTablero(const tpTablero &tablero)
     for (int y = 0; y < tablero.nfils; y++)
     {
         for (int x = 0; x < tablero.ncols; x++)
-        cout << (char)tablero.matriz[x][y] << " ";
+            switch (tablero.matriz[x][y])
+            {
+                case VACIA:
+                    cout << "\033[47m" << "  " << "\033[0m";
+                    break;
+                case OCUPADA:
+                    cout << "\033[47;31m" << "O " << "\033[0m";
+                    break;
+                case NO_USADA:
+                    cout << "\033[41m" << "  " << "\033[0m";
+                    break;
+            }
         cout << endl;
     }
     cout << endl;
@@ -100,11 +113,20 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
 
             for (int i = 0; i < 8; i++)
             {
-                // Prueba el movimiento en cada direccion
+                // Prueba un movimiento
                 bool movValido = moverFicha(tablero, movValidos, solucionParcial, {x, y}, (tpDireccion)i);
                 if (!movValido)
                     continue;
 
+
+                // Movimiento realizado
+                if (retardo > 0)
+                {
+                    mostrarTablero(tablero);
+                    cout << "\033[" << tablero.nfils + 1 << "A";
+                    this_thread::sleep_for(chrono::milliseconds(retardo));
+                }
+            
                 // Llamada recursiva para buscar la solución desde el nuevo estado del tablero
                 int solucion = buscaSolucion(tablero, movValidos, solucionParcial, retardo);
                 if (solucion == 1)
@@ -116,6 +138,13 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
                 tablero.matriz[(movDeshacer.origen.x + movDeshacer.destino.x) / 2]
                               [(movDeshacer.origen.y + movDeshacer.destino.y) / 2] = OCUPADA;
                 tablero.matriz[movDeshacer.destino.x][movDeshacer.destino.y] = VACIA;
+
+                if (retardo > 0)
+                {
+                    mostrarTablero(tablero);
+                    cout << "\033[" << tablero.nfils + 1 << "A";
+                    this_thread::sleep_for(chrono::milliseconds(retardo));
+                }
             }
         }
 
@@ -138,36 +167,36 @@ bool moverFicha(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpLi
     tpPosicion nuevaPosicion = {posicionInicial.x, posicionInicial.y};
     switch (direccionMovimiento)
     {
-    case superiorIzquierda:
-        nuevaPosicion.x -= 2;
-        nuevaPosicion.y -= 2;
-        break;
-    case superiorDerecha:
-        nuevaPosicion.x += 2;
-        nuevaPosicion.y -= 2;
-        break;
-    case inferiorIzquierda:
-        nuevaPosicion.x -= 2;
-        nuevaPosicion.y += 2;
-        break;
-    case inferiorDerecha:
-        nuevaPosicion.x += 2;
-        nuevaPosicion.y += 2;
-        break;
-    case izquierda:
-        nuevaPosicion.x -= 2;
-        break;
-    case derecha:
-        nuevaPosicion.x += 2;
-        break;
-    case superior:
-        nuevaPosicion.y -= 2;
-        break;
-    case inferior:
-        nuevaPosicion.y += 2;
-        break;
-    default:
-        return false;
+        case superiorIzquierda:
+            nuevaPosicion.x -= 2;
+            nuevaPosicion.y -= 2;
+            break;
+        case superiorDerecha:
+            nuevaPosicion.x += 2;
+            nuevaPosicion.y -= 2;
+            break;
+        case inferiorIzquierda:
+            nuevaPosicion.x -= 2;
+            nuevaPosicion.y += 2;
+            break;
+        case inferiorDerecha:
+            nuevaPosicion.x += 2;
+            nuevaPosicion.y += 2;
+            break;
+        case izquierda:
+            nuevaPosicion.x -= 2;
+            break;
+        case derecha:
+            nuevaPosicion.x += 2;
+            break;
+        case superior:
+            nuevaPosicion.y -= 2;
+            break;
+        case inferior:
+            nuevaPosicion.y += 2;
+            break;
+        default:
+            return false;
     }
 
     if (nuevaPosicion.x < 0 || nuevaPosicion.x >= tablero.ncols ||
