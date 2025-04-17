@@ -9,8 +9,8 @@ using namespace std;
  *
  * @param argc Número de argumentos pasados al programa.
  * @param argv Array de argumentos pasados al programa.
- * @param [out] ficheroTablero Nombre del fichero que contiene el tablero. Sin extensión.
- * @param [out] ficheroMovimientos Nombre del fichero que contiene los movimientos permitidos. Sin extensión.
+ * @param [out] ficheroTablero Nombre del fichero que contiene el tablero.
+ * @param [out] ficheroMovimientos Nombre del fichero que contiene los movimientos permitidos.
  * @param [out] retardo Retardo en milisegundos entre cada movimiento.
  * @param [out] ficheroSalida Nombre del fichero donde se guardará el resultado.
  * @return `true` si los argumentos son válidos, `false` en caso contrario. En caso de error, se imprime el mensaje de error correspondiente.
@@ -22,15 +22,15 @@ bool leerArgumentos(
     int &retardo,
     string &ficheroSalida)
 {
-    // Se debben pasar 3 o 4 argumentos (sin contar el nombre del ejecutable)
+    // Se deben pasar 3 o 4 argumentos (sin contar el nombre del ejecutable)
     if (!(argc == 4 || argc == 5))
     {
         cerr << "Error: Numero de argumentos incorrecto. Argumentos esperados:\033[37m ficheroTablero ficheroMovimientos retardo [ficheroSalida] \033[0m" << endl;
         return false;
     }
 
-    ficheroTablero = "./tableros_modelo/" + string(argv[1]) + ".txt";
-    ficheroMovimientos = "./movimientos/" + string(argv[2]) + ".txt";
+    ficheroTablero = string(argv[1]);
+    ficheroMovimientos = string(argv[2]);
 
     try
     {
