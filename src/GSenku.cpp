@@ -16,14 +16,15 @@ bool inicializarTablero(const string nombreFichero, tpTablero &tablero)
     }
 
     f >> tablero.nfils >> tablero.ncols;
-    for (int y = 0; y < tablero.ncols; y++)
-        for (int x = 0; x < tablero.nfils; x++)
-        {
+
+    for (int y = 0; y < tablero.nfils; y++)
+        for (int x = 0; x < tablero.ncols; x++)
+        {   
             char aux;
             f >> aux;
             tablero.matriz[x][y] = (tpEstadoCelda)aux;
         }
-
+        
     f.close();
     return true;
 }
@@ -238,10 +239,10 @@ void escribeListaMovimientos(string nombreFichero, const tpListaMovimientos &sol
 
     else
         for (int i = 0; i < solucion.numMovs; i++)
-            f << solucion.movs[i].origen.x << ","
-              << solucion.movs[i].origen.y << ":"
-              << solucion.movs[i].destino.x << ","
-              << solucion.movs[i].destino.y << endl;
+            f << solucion.movs[i].origen.y << ","
+              << solucion.movs[i].origen.x << ":"
+              << solucion.movs[i].destino.y << ","
+              << solucion.movs[i].destino.x << endl;
 
     f.close();
 }
