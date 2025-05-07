@@ -1,3 +1,15 @@
+/** ======================================================================
+ * GSenku.hpp
+ * Fichero de interfaz con la lógica necesaria para resolver el juego de GSenku
+ *
+ * AUTORES:
+ * - Profesores de la asignatura "Programación II"
+ *
+ * MODIFICADO POR:
+ * - Hugo García Sánchez (nip: 930108)
+ * - Óscar Grimal Torres (nip: 926897)
+ * ==================================================================== */
+
 #include <iostream>
 #include <fstream>
 
@@ -5,6 +17,7 @@ using namespace std;
 
 // CONSTANTES Y TIPOS
 
+// Tipos de simetría del tablero
 enum tpSimetria
 {
     NO_SIMETRICA,
@@ -21,6 +34,7 @@ enum tpEstadoCelda
     OCUPADA = 'o',
 };
 
+// Direcciones de movimiento
 enum tpDireccion
 {
     superiorIzquierda = 0,

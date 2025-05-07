@@ -1,3 +1,21 @@
+/** ======================================================================
+ * mainGSenku.cpp
+ * Programa principal del juego GSenku.
+ *
+ * RESUMEN:
+ * Este programa resuelve el juego GSenku utilizando un algoritmo de búsqueda
+ * de soluciones por backtracking. La función `main` recibe dos ficheros con
+ * el tablero a resolver y los movimientos permitidos, además de un retardo
+ * en milisegundos entre cada movimiento para mostrar la resolución en tiempo
+ * real. El resultado se guarda en un fichero de salida, que por defecto
+ * es "resultado.txt". Se puede especificar un fichero de salida diferente
+ * mediante un 4o argumento opcional.
+ *
+ * AUTORES:
+ * - Hugo García Sánchez (nip: 930108)
+ * - Óscar Grimal Torres (nip: 926897)
+ * ==================================================================== */
+
 #include <iostream>
 #include <string>
 #include "GSenku.hpp"
@@ -29,9 +47,11 @@ bool leerArgumentos(
         return false;
     }
 
+    // Ficheros de entrada
     ficheroTablero = string(argv[1]);
     ficheroMovimientos = string(argv[2]);
 
+    // Retardo
     try
     {
         retardo = stoi(argv[3]);
@@ -42,10 +62,8 @@ bool leerArgumentos(
         return false;
     }
 
-    if (argc == 5)
-        ficheroSalida = string(argv[4]);
-    else
-        ficheroSalida = "resultado.txt";
+    // Fichero de salida
+    ficheroSalida = argc == 5 ? string(argv[4]) : "resultado.txt";
 
     return true;
 }
@@ -54,7 +72,7 @@ bool leerArgumentos(
  * Progrema principal que resuleve el juego de GSenku.
  *
  * @param argc Número de argumentos pasados al programa.
- * @param argv Array de argumentos pasados al programa.
+ * @param argv Vector de argumentos pasados al programa.
  */
 int main(int argc, char *argv[])
 {

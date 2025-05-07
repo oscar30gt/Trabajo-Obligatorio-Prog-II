@@ -1,3 +1,12 @@
+/** ======================================================================
+ * GSenku.cpp
+ * Fichero de implementación de las funciones de la interfaz "GSenku.hpp" 
+ *
+ * AUTORES:
+ * - Hugo García Sánchez (nip: 930108)
+ * - Óscar Grimal Torres (nip: 926897)
+ * ==================================================================== */
+
 #include "GSenku.hpp"
 #include <fstream>
 #include <chrono>
@@ -112,13 +121,13 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
             if (celda != OCUPADA)
                 continue;
 
+            // Itera sobre las celdas adyacentes
             for (int i = 0; i < 8; i++)
             {
                 // Prueba un movimiento
                 bool movValido = moverFicha(tablero, movValidos, solucionParcial, {x, y}, (tpDireccion)i);
                 if (!movValido)
                     continue;
-
 
                 // Movimiento realizado
                 if (retardo > 0)
@@ -140,6 +149,7 @@ int buscaSolucion(tpTablero &tablero, const tpMovimientosValidos &movValidos, tp
                               [(movDeshacer.origen.y + movDeshacer.destino.y) / 2] = OCUPADA;
                 tablero.matriz[movDeshacer.destino.x][movDeshacer.destino.y] = VACIA;
 
+                // Movimiento revertido
                 if (retardo > 0)
                 {
                     mostrarTablero(tablero);
@@ -206,14 +216,14 @@ bool moverFicha(tpTablero &tablero, const tpMovimientosValidos &movValidos, tpLi
         return false; // Movimiento fuera de los límites del tablero o celda ocupada/no usada
 
     // Comprobar que se salta sobre una celda ocupada
-    tpPosicion posicionCentral = {(posicionInicial.x + nuevaPosicion.x) / 2, (posicionInicial.y + nuevaPosicion.y) / 2};
-    if (tablero.matriz[posicionCentral.x][posicionCentral.y] != OCUPADA)
+    tpPosicion posicionIntermedia = {(posicionInicial.x + nuevaPosicion.x) / 2, (posicionInicial.y + nuevaPosicion.y) / 2};
+    if (tablero.matriz[posicionIntermedia.x][posicionIntermedia.y] != OCUPADA)
         return false; // Un movimiento siempre salta una celda ocupada
 
-    // Movimiento valido
+    // MOVIMIENTO VÁLIDO
     // Actualizar el tablero
     tablero.matriz[posicionInicial.x][posicionInicial.y] = VACIA;
-    tablero.matriz[posicionCentral.x][posicionCentral.y] = VACIA;
+    tablero.matriz[posicionIntermedia.x][posicionIntermedia.y] = VACIA;
     tablero.matriz[nuevaPosicion.x][nuevaPosicion.y] = OCUPADA;
 
     // Actualizar la lista de movimientos
@@ -234,6 +244,7 @@ void escribeListaMovimientos(string nombreFichero, const tpListaMovimientos &sol
         return;
     }
 
+    // Si la lista de movimientos está vacía, se escribe un -1
     if (solucion.numMovs == 0)
         f << -1 << endl;
 

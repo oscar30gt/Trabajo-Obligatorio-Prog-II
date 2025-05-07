@@ -1,4 +1,9 @@
 #---------------------------------------------------------
+# Makefile para compilar el programa GSenku
+# Autores:
+# - Hugo García Sánchez (nip: 930108)
+# - Óscar Grimal Torres (nip: 926897)
+#---------------------------------------------------------
 
 CC = g++                   # compilador
 CPPFLAGS = -std=c++11      # opciones de compilación
